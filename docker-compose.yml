@@ -1,0 +1,9 @@
+docker-hapi:
+  restart: always
+  build: .
+  ports:
+  - "9080:3000"
+  environment:
+  - HOST=docker
+  volumes:
+  - /var/log/bankplugin-devtailor:/var/log/bankplugin-devtailor
