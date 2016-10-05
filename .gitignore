@@ -38,6 +38,5 @@ nbproject
 .node_history
 .tmp
 pgdeploy.json
-config.js
 models-new
 s3.env
