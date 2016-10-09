@@ -31,5 +31,6 @@ loadPlugins(server)
 	})
 	.catch((err) => {
 		server.log(['startup', 'error'], `Server start error ${err}`);
+		process.exit(1);
 	});
 
