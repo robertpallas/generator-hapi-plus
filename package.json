@@ -20,6 +20,7 @@
   ],
   "author": "Robert Pallas",
   "license": "MIT",
+  "private": true,
   "bugs": {
     "url": "https://github.com/robertpallas/generator-hapi-plus/issues"
   },
@@ -33,6 +34,7 @@
     "hapi-auth-jwt2": "^7.1.3",
     "hapi-mongodb": "^6.2.0",
     "hapi-pg-promise": "0.0.6",
+    "hapi-plugin-mysql": "^4.0.0",
     "hapi-plus-routes": "^1.0.0",
     "hapi-router": "^3.5.0",
     "hapi-swagger": "^7.2.0",
