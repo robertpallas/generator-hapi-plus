@@ -4,11 +4,11 @@ const Inert = require('inert');
 const Vision = require('vision');
 const JWT = require('hapi-auth-jwt2');
 const Good = require('good');
-const Routes = require('hapi-plus-routes');
-const Pg = require('hapi-pg-promise');
-const MySql = require('hapi-plugin-mysql');
-const Mongo = require('hapi-mongodb');
 const MrHorse = require('mrhorse');
+const Routes = require('hapi-plus-routes');<% if(postgre) { %>
+const Pg = require('hapi-pg-promise');<% } if(mysql) { %>
+const MySql = require('hapi-plugin-mysql');<% } if(mongo) { %>
+const Mongo = require('hapi-mongodb');<% } %>
 const Swagger = require('hapi-swagger');
 // const SocketIo = require('hapi-io');
 
@@ -60,18 +60,18 @@ plugins.push({
 		}
 	}
 });
-
+<% if(postgre) { %>
 plugins.push({
 	register: Pg,
 	options: {
 		cn: config.postgreSql
 	}
-});
+});<% } if(mysql) { %>
 
 plugins.push({
 	register: MySql,
 	options: config.mySql
-});
+});<% } if(mongo) { %>
 
 plugins.push({
 	register: Mongo,
@@ -79,7 +79,7 @@ plugins.push({
 		url: config.mongo,
 		decorate: true
 	}
-});
+});<% } %>
 
 plugins.push({
 	register: MrHorse,
@@ -99,7 +99,7 @@ plugins.push({
 plugins.push({
 	register: Swagger,
 	options: {
-		documentationPage: process.env.DB_ENV !== 'live', // swagger is added to all non-live environments
+		documentationPage: true, // boolean to enable/disable Swagger
 		info: {
 			title: 'API Documentation',
 			version: Pack.version

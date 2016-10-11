@@ -1,6 +1,6 @@
 FROM risingstack/alpine:3.4-v6.7.0-4.0.0
 
-MAINTAINER Robert <robert@devtailor.com>
+MAINTAINER <%- author %>
 
 RUN apk update
 
