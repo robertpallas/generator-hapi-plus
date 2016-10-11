@@ -175,6 +175,7 @@ module.exports = Generators.Base.extend({
 
 		this.copy('_gitignore', Path.join(this.appName, '.gitignore'));
 		this.copy('index.js', Path.join(this.appName, 'index.js'));
+		this.copy('.eslintrc', Path.join(this.appName, '.eslintrc'));
 		this.template('_package.json', Path.join(this.appName, 'package.json'));
 		this.template('_README.md', Path.join(this.appName, 'README.md'));
 		this.template('config.js', Path.join(this.appName, 'config.js'));
@@ -185,8 +186,8 @@ module.exports = Generators.Base.extend({
 			this.template('docker-compose.yml', Path.join(this.appName, 'docker-compose.yml'));
 		}
 
-		Mkdirp.sync(Path.join(this.appName, 'routes'));
-		Mkdirp.sync(Path.join(this.appName, 'lib'));
+		this.directory('lib', Path.join(this.appName, 'routes'));
+		this.directory('routes', Mkdirp.sync(Path.join(this.appName, 'lib'))); // TODO: add examples boolean
 
 		this.template('lib/loadPlugins.js', Path.join(this.appName, 'lib/loadPlugins.js'));
 	}
