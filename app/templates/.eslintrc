@@ -1,34 +1,27 @@
 {
-  extends: 'airbnb',
-  env: {
-	node: true
-  },
-  rules: {
-	'no-tabs': 0,
-	indent: [
-	  'error',
-	  'tab'
-	],
-	'comma-dangle': [
-	  'error',
-	  'never'
-	],
-	'keyword-spacing': [
-	  error,
-	  {
-		overrides: {
-		  if: {
-			after: false
-		  },
-		  for: {
-			after: false
-		  },
-		  while: {
-			after: false
-		  }
-		}
-	  }
-	],
-	'no-param-reassign': 0
-  }
+    extends: 'airbnb',
+    env: {
+        node: true
+    },
+    rules: {
+        indent: ['error', 4],
+        'comma-dangle': ['error', 'never'],
+        'keyword-spacing': [
+            'error',
+            {
+                overrides: {
+                    if: {
+                        after: false
+                    },
+                    for: {
+                        after: false
+                    },
+                    while: {
+                        after: false
+                    }
+                }
+            }
+        ],
+        'no-param-reassign': 0
+    }
 }
