@@ -4,7 +4,7 @@ module.exports = {
     path: '/examples/mongo',
     handler: (request, reply) => {
         if(!request.mongo || !request.mongo.db) {
-            reply(Boom.notImplemented('MySql not added'));
+            reply(Boom.notImplemented('Mongo not added'));
         } else {
             // get the first document or create one
             // then increment count field
