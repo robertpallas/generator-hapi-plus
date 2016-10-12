@@ -1,11 +1,14 @@
 const Generators = require('yeoman-generator');
 const Path = require('path');
-const Mkdirp = require('mkdirp');
-const GitConfig = require('git-config');
-const Random = require('randomstring');
+const _ = require('lodash');
+const mkdirp = require('mkdirp');
+const gitConfig = require('git-config');
+const randomString = require('randomstring');
+const yosay = require('yosay');
+const chalk = require('chalk');
 
 module.exports = Generators.Base.extend({
-    constructor() {
+    constructor: function() {
         Generators.Base.apply(this, arguments);
 
         this.argument('appName', {
@@ -21,7 +24,7 @@ module.exports = Generators.Base.extend({
         const done = this.async();
         this.gitConfig = {};
 
-        GitConfig((err, config) => {
+        gitConfig((err, config) => {
             if(err) {
                 return done();
             }
@@ -29,6 +32,11 @@ module.exports = Generators.Base.extend({
             this.gitConfig = config;
             done();
         });
+    },
+    hello() {
+        this.log(yosay(
+            `Welcome to the ${chalk.red('Hapi Plus')} generator!`
+        ));
     },
     askFor() {
         const prompts = [{
@@ -39,16 +47,23 @@ module.exports = Generators.Base.extend({
             message: 'Author',
             default: this.gitConfig.user && (`${this.gitConfig.user.name} <${this.gitConfig.user.email}>`)
         }, {
-            name: 'postgre',
-            type: 'confirm',
-            default: true,
-            message: 'Add PostgreSQL with Pg-Promise?'
+            name: 'features',
+            message: 'Database plugins to be added',
+            type: 'checkbox',
+            choices: [
+                {
+                    name: 'postgre',
+                    checked: true
+                },
+                {name: 'mysql'},
+                {name: 'mongo'}
+            ]
         }, {
             name: 'addPgConfig',
             type: 'confirm',
-            default: false,
+            default: true,
             message: 'Add PostgreSQL login to config.js?',
-            when: answers => answers.postgre
+            when: answers => answers.features.indexOf('postgre') > -1
         }, {
             name: 'pgHost',
             default: 'localhost',
@@ -75,16 +90,11 @@ module.exports = Generators.Base.extend({
             default: answers => answers.pgUser,
             when: answers => answers.addPgConfig
         }, {
-            name: 'mysql',
-            type: 'confirm',
-            default: false,
-            message: 'Add MySql?'
-        }, {
             name: 'addMysqlConfig',
             type: 'confirm',
-            default: false,
+            default: true,
             message: 'Add MySql login to config.js?',
-            when: answers => answers.mysql
+            when: answers => answers.features.indexOf('mysql') > -1
         }, {
             name: 'mysqlHost',
             default: 'localhost',
@@ -106,16 +116,11 @@ module.exports = Generators.Base.extend({
             message: 'MySql password',
             when: answers => answers.addMysqlConfig
         }, {
-            name: 'mongo',
-            type: 'confirm',
-            default: false,
-            message: 'Add MongoDB?'
-        }, {
             name: 'addMongoConfig',
             type: 'confirm',
-            default: false,
+            default: true,
             message: 'Add Mongo to config.js?',
-            when: answers => answers.mongo
+            when: answers => answers.features.indexOf('mongo') > -1
         }, {
             name: 'mongoUrl',
             message: 'Mongo URL',
@@ -131,6 +136,15 @@ module.exports = Generators.Base.extend({
             message: 'Host port mapped to access Docker container',
             default: '9000',
             when: answers => answers.docker
+        }, {
+            name: 'routes',
+            message: 'Add routes',
+            type: 'checkbox',
+            choices: [
+                { name: 'users POST login, POST register, GET me'},
+                { name: 'examples for Postgre, MySql and Mongo plugin usage' },
+                { name: 'welcome at GET /' }
+            ]
         }];
 
         return this.prompt(prompts).then((answers) => {
@@ -139,7 +153,7 @@ module.exports = Generators.Base.extend({
 
             this.config.postgre = this.config.mysql = this.config.mongo = false;
 
-            this.postgre = answers.postgre;
+            this.postgre = answers.features.indexOf('postgre') > -1;
             if(answers.addPgConfig) {
                 this.config.postgre = {
                     host: answers.pgHost,
@@ -149,16 +163,17 @@ module.exports = Generators.Base.extend({
                     database: answers.pgDb
                 };
             }
-            this.mysql = answers.mysql;
+
+            this.mysql = answers.features.indexOf('mysql') > -1;
             if(answers.addMysqlConfig) {
                 this.config.mysql = {
                     host: answers.mysqlHost,
-                    port: answers.mysqlgPort,
+                    port: answers.mysqlPort,
                     user: answers.mysqlUser,
                     password: answers.mysqlPwd
                 };
             }
-            this.mongo = answers.mongo;
+            this.mongo = answers.features.indexOf('mongo') > -1;
             if(answers.addMongoConfig) {
                 this.config.mongo = {
                     url: answers.mongoUrl
@@ -167,13 +182,22 @@ module.exports = Generators.Base.extend({
 
             this.docker = answers.docker;
             this.dockerPort = answers.dockerPort;
-            this.authKey = Random.generate();
+            this.authKey = randomString.generate();
+
+            this.routes = {};
+
+            // set selected routes keys true
+            _.each(answers.routes, el => {
+                let routeKey = el.split(' ')[0]; // use first word in string as key
+                this.routes[routeKey] = true;
+            });
         });
     },
     app() {
-        Mkdirp.sync(this.appName);
 
-        this.copy('_gitignore', Path.join(this.appName, '.gitignore'));
+        mkdirp.sync(this.appName);
+
+        this.copy('_gitignore', Path.join(this.appName, '.gitignore')); 
         this.copy('index.js', Path.join(this.appName, 'index.js'));
         this.copy('.eslintrc', Path.join(this.appName, '.eslintrc'));
         this.template('_package.json', Path.join(this.appName, 'package.json'));
@@ -186,9 +210,19 @@ module.exports = Generators.Base.extend({
             this.template('docker-compose.yml', Path.join(this.appName, 'docker-compose.yml'));
         }
 
-        this.directory('lib', Path.join(this.appName, 'routes'));
-        this.directory('routes', Mkdirp.sync(Path.join(this.appName, 'lib'))); // TODO: add examples boolean
+        this.directory('lib', Path.join(this.appName, 'lib'));
+        mkdirp.sync(Path.join(this.appName, 'routes'));
 
-        this.template('lib/loadPlugins.js', Path.join(this.appName, 'lib/loadPlugins.js'));
+        if(this.routes.examples) {
+            this.directory(Path.join('routes' ,'examples'), Path.join(this.appName, 'routes', 'examples'));
+        }
+        if(this.routes.users) {
+            this.directory(Path.join('routes' ,'users'), Path.join(this.appName, 'routes', 'users'));
+        }
+        if(this.routes.welcome) {
+            this.copy(Path.join('routes' ,'get.js'), Path.join(this.appName, 'routes', 'get.js'));
+        }
+
+        this.template(Path.join('lib', 'loadPlugins.js'), Path.join(this.appName, 'lib', 'loadPlugins.js'));
     }
 });
