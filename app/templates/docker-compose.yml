@@ -1,4 +1,4 @@
-docker-hapi:
+<%= appName %>:
   restart: always
   build: .
   ports:

@@ -148,6 +148,7 @@ module.exports = Generators.Base.extend({
         }];
 
         return this.prompt(prompts).then((answers) => {
+            
             this.description = answers.description;
             this.author = answers.author;
 
