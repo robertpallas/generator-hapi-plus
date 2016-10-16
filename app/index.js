@@ -149,7 +149,7 @@ module.exports = Generators.Base.extend({
                 let routeAddChoices = [
                     {name: 'welcome at GET /'}
                 ];
-                if(answers.postgre || answers.mysql || answers.mongo) {
+                if(answers.features.length) {
                     routeAddChoices.push({name: 'examples for Postgre, MySql and Mongo plugin usage'});
                 }
                 if(answers.auth) {
