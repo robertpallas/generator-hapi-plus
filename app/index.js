@@ -45,7 +45,7 @@ module.exports = Generators.Base.extend({
         }, {
             name: 'author',
             message: 'Author',
-            default: this.gitConfig.user && (`${this.gitConfig.user.name} <${this.gitConfig.user.email}>`)
+            default: this.gitConfig && this.gitConfig.user && (`${this.gitConfig.user.name} <${this.gitConfig.user.email}>`)
         }, {
             name: 'features',
             message: 'Database plugins to be added',
@@ -127,6 +127,11 @@ module.exports = Generators.Base.extend({
             default: 'mongodb://localhost:27017',
             when: answers => answers.addMongoConfig
         }, {
+            name: 'auth',
+            type: 'confirm',
+            default: true,
+            message: 'Add auth with JWT?'
+        }, {
             name: 'docker',
             type: 'confirm',
             default: true,
@@ -140,11 +145,18 @@ module.exports = Generators.Base.extend({
             name: 'routes',
             message: 'Add routes',
             type: 'checkbox',
-            choices: [
-                { name: 'users POST login, POST register, GET me'},
-                { name: 'examples for Postgre, MySql and Mongo plugin usage' },
-                { name: 'welcome at GET /' }
-            ]
+            choices: answers => {
+                let routeAddChoices = [
+                    {name: 'welcome at GET /'}
+                ];
+                if(answers.postgre || answers.mysql || answers.mongo) {
+                    routeAddChoices.push({name: 'examples for Postgre, MySql and Mongo plugin usage'});
+                }
+                if(answers.auth) {
+                    routeAddChoices.push({name: 'users POST login, POST register, GET me'});
+                }
+                return routeAddChoices;
+            }
         }];
 
         return this.prompt(prompts).then((answers) => {
@@ -181,6 +193,7 @@ module.exports = Generators.Base.extend({
                 };
             }
 
+            this.auth = answers.auth;
             this.docker = answers.docker;
             this.dockerPort = answers.dockerPort;
             this.authKey = randomString.generate();
@@ -211,9 +224,16 @@ module.exports = Generators.Base.extend({
             this.template('docker-compose.yml', Path.join(this.appName, 'docker-compose.yml'));
         }
 
-        this.directory('lib', Path.join(this.appName, 'lib'));
-        mkdirp.sync(Path.join(this.appName, 'routes'));
+        // copy /lib folder
+        mkdirp.sync(Path.join(this.appName, 'lib'));
+        this.directory(Path.join('lib', 'policies'), Path.join(this.appName, 'lib', 'policies'));
+        this.template(Path.join('lib', 'loadPlugins.js'), Path.join(this.appName, 'lib', 'loadPlugins.js'));
+        if(this.auth) {
+            this.copy(Path.join('lib' ,'validateJWt.js'), Path.join(this.appName, 'lib', 'validateJWt.js'));
+        }
 
+        // copy /routes folder
+        mkdirp.sync(Path.join(this.appName, 'routes'));
         if(this.routes.examples) {
             this.directory(Path.join('routes' ,'examples'), Path.join(this.appName, 'routes', 'examples'));
         }
@@ -223,7 +243,5 @@ module.exports = Generators.Base.extend({
         if(this.routes.welcome) {
             this.copy(Path.join('routes' ,'get.js'), Path.join(this.appName, 'routes', 'get.js'));
         }
-
-        this.template(Path.join('lib', 'loadPlugins.js'), Path.join(this.appName, 'lib', 'loadPlugins.js'));
     }
 });

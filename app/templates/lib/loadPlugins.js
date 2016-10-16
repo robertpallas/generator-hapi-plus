@@ -2,17 +2,17 @@ const path = require('path');
 
 const Inert = require('inert');
 const Vision = require('vision');
-const JWT = require('hapi-auth-jwt2');
 const Good = require('good');
 const MrHorse = require('mrhorse');
-const Routes = require('hapi-plus-routes');<% if(postgre) { %>
+const Routes = require('hapi-plus-routes');<% if(auth) { %>
+const JWT = require('hapi-auth-jwt2');<% } if(postgre) { %>
 const Pg = require('hapi-pg-promise');<% } if(mysql) { %>
 const MySql = require('hapi-plugin-mysql');<% } if(mongo) { %>
 const Mongo = require('hapi-mongodb');<% } %>
 const Swagger = require('hapi-swagger');
 // const SocketIo = require('hapi-io');
-
-const validateFunc = require('./validateJwt.js');
+<% if(auth) { %>
+const validateFunc = require('./validateJwt.js');<% } %>
 const Pack = require('../package.json');
 const config = require('../config.js');
 
@@ -107,7 +107,7 @@ plugins.push({
 		jsonEditor: true
 	}
 });
-
+<% if(auth) { %>
 module.exports = server => new Promise((resolve, reject) => {
 	server.register(JWT, (jwtRegErr) => {
 		if(jwtRegErr) {
@@ -130,4 +130,13 @@ module.exports = server => new Promise((resolve, reject) => {
 			});
 		}
 	});
-});
+});<% } else { %>
+module.exports = server => new Promise((resolve, reject) => {
+	server.register(plugins, (err) => {
+		if(err) {
+			reject(err);
+		} else {
+			resolve();
+		}
+	});
+});<% } %>

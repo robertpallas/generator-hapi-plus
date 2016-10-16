@@ -1,6 +1,7 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const path = require('path');
+const pjv = require('package-json-validator').PJV;
 
 describe('hapi-plus:app', function() {
     const appName = 'test-app-name';
@@ -25,6 +26,7 @@ describe('hapi-plus:app', function() {
             addMongoConfig: true,
             mongoUrl: 'mongodb://localhost:27017',
             docker: true,
+            auth: true,
             dockerPort: '9009',
             routes: [
                 'users POST login, POST register, GET me',
@@ -79,6 +81,14 @@ describe('hapi-plus:app', function() {
             assert.fileContent('Dockerfile', new RegExp(promptAnswers.author));
             assert.fileContent('package.json', new RegExp(promptAnswers.author));
         });
+
+        it('has valid package.json', function() {
+            let pack = require(process.cwd() + '/package.json');
+            pack = JSON.stringify(pack);
+            let packageValidation = pjv.validate(pack);
+
+            assert(packageValidation.valid);
+        });
     });
 
     describe('with minimal files', function() {
@@ -88,6 +98,7 @@ describe('hapi-plus:app', function() {
             author: 'Test Donkey',
             features: [],
             docker: false,
+            auth: false,
             routes: []
         };
 
@@ -106,6 +117,7 @@ describe('hapi-plus:app', function() {
             const expectedFilesNotToExist = [
                 'Dockerfile',
                 'docker-compose.yml',
+                'lib/validateJwt.js',
                 'routes/get.js',
                 'routes/examples/mongoExample.js',
                 'routes/examples/mySqlExample.js',
@@ -122,9 +134,19 @@ describe('hapi-plus:app', function() {
             assert.noFileContent('package.json', /hapi-pg-promise/);
             assert.noFileContent('package.json', /hapi-plugin-mysql/);
             assert.noFileContent('package.json', /hapi-mongodb/);
+            assert.noFileContent('package.json', /jsonwebtoken/);
+            assert.noFileContent('lib/loadPlugins.js', /jwt/i);
             assert.noFileContent('lib/loadPlugins.js', /hapi-pg-promise/);
             assert.noFileContent('lib/loadPlugins.js', /hapi-plugin-mysql/);
             assert.noFileContent('lib/loadPlugins.js', /hapi-mongodb/);
+        });
+
+        it('has valid package.json', function() {
+            let pack = require(process.cwd() + '/package.json');
+            pack = JSON.stringify(pack);
+            let packageValidation = pjv.validate(pack);
+
+            assert(packageValidation.valid);
         });
     });
 });
