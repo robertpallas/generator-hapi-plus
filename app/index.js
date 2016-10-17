@@ -116,6 +116,11 @@ module.exports = Generators.Base.extend({
             message: 'MySql password',
             when: answers => answers.addMysqlConfig
         }, {
+            name: 'mysqlDb',
+            message: 'MySql database',
+            default: answers => answers.mysqlUser,
+            when: answers => answers.addMysqlConfig
+        }, {
             name: 'addMongoConfig',
             type: 'confirm',
             default: true,
@@ -183,7 +188,8 @@ module.exports = Generators.Base.extend({
                     host: answers.mysqlHost,
                     port: answers.mysqlPort,
                     user: answers.mysqlUser,
-                    password: answers.mysqlPwd
+                    password: answers.mysqlPwd,
+                    database: answers.mysqlDb
                 };
             }
             this.mongo = answers.features.indexOf('mongo') > -1;
