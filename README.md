@@ -4,7 +4,7 @@ generator-hapi-plus
 
 Quickstart
 ==========
-    npm install -g yeoman generator-hapi-plus
+    npm install -g yo generator-hapi-plus
     yo hapi-plus <APP-NAME>
     cd <APP-NAME>
     npm install
