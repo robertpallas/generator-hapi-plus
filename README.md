@@ -18,6 +18,7 @@ Features
  * MySql plugin
  * MongoDb plugin
  * Authentication with JWT
+ * WebSockets
  * Logging `/logs`
  * Automatic documentation with Swagger `http://0.0.0.0:3000/documentation`
  * Routes structure and examples `/routes`

@@ -9,8 +9,8 @@ const JWT = require('hapi-auth-jwt2');<% } if(postgre) { %>
 const Pg = require('hapi-pg-promise');<% } if(mysql) { %>
 const MySql = require('hapi-plugin-mysql');<% } if(mongo) { %>
 const Mongo = require('hapi-mongodb');<% } %>
-const Swagger = require('hapi-swagger');
-// const SocketIo = require('hapi-io');
+const Swagger = require('hapi-swagger');<% if(ws) { %>
+const Nes = require('nes');<% } %>
 <% if(auth) { %>
 const validateFunc = require('./validateJwt.js');<% } %>
 const Pack = require('../package.json');
@@ -59,8 +59,8 @@ plugins.push({
             }]
         }
     }
-});
-<% if(postgre) { %>
+});<% if(postgre) { %>
+    
 plugins.push({
     register: Pg,
     options: {
@@ -79,6 +79,10 @@ plugins.push({
         url: config.mongo,
         decorate: true
     }
+});<% } if(ws) { %>
+
+plugins.push({
+    register: Nes
 });<% } %>
 
 plugins.push({

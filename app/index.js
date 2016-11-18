@@ -137,6 +137,11 @@ module.exports = Generators.Base.extend({
             default: true,
             message: 'Add auth with JWT?'
         }, {
+            name: 'ws',
+            type: 'confirm',
+            default: true,
+            message: 'Add WebSocket support?'
+        }, {
             name: 'docker',
             type: 'confirm',
             default: true,
@@ -156,6 +161,9 @@ module.exports = Generators.Base.extend({
                 ];
                 if(answers.features.length) {
                     routeAddChoices.push({name: 'examples for Postgre, MySql and Mongo plugin usage'});
+                }
+                if(answers.ws) {
+                    routeAddChoices.push({name: 'websocket message example'});
                 }
                 if(answers.auth) {
                     routeAddChoices.push({name: 'users POST login, POST register, GET me'});
@@ -200,6 +208,7 @@ module.exports = Generators.Base.extend({
             }
 
             this.auth = answers.auth;
+            this.ws = answers.ws;
             this.docker = answers.docker;
             this.dockerPort = answers.dockerPort;
             this.authKey = randomString.generate();
@@ -233,6 +242,7 @@ module.exports = Generators.Base.extend({
         // copy /lib folder
         mkdirp.sync(Path.join(this.appName, 'lib'));
         this.directory(Path.join('lib', 'policies'), Path.join(this.appName, 'lib', 'policies'));
+
         this.template(Path.join('lib', 'loadPlugins.js'), Path.join(this.appName, 'lib', 'loadPlugins.js'));
         if(this.auth) {
             this.copy(Path.join('lib' ,'validateJWt.js'), Path.join(this.appName, 'lib', 'validateJWt.js'));
@@ -241,7 +251,10 @@ module.exports = Generators.Base.extend({
         // copy /routes folder
         mkdirp.sync(Path.join(this.appName, 'routes'));
         if(this.routes.examples) {
-            this.directory(Path.join('routes' ,'examples'), Path.join(this.appName, 'routes', 'examples'));
+            this.directory(Path.join('routes' ,'examples', 'db'), Path.join(this.appName, 'routes', 'examples'));
+        }
+        if(this.routes.websocket) {
+            this.copy(Path.join('routes' ,'examples', 'socketExample.js'), Path.join(this.appName, 'routes', 'examples', 'socketExample.js'));
         }
         if(this.routes.users) {
             this.directory(Path.join('routes' ,'users'), Path.join(this.appName, 'routes', 'users'));

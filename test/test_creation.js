@@ -27,11 +27,13 @@ describe('hapi-plus:app', function() {
             mongoUrl: 'mongodb://localhost:27017',
             docker: true,
             auth: true,
+            ws: true,
             dockerPort: '9009',
             routes: [
                 'users POST login, POST register, GET me',
                 'examples for Postgre, MySql and Mongo plugin usage',
-                'welcome at GET /'
+                'welcome at GET /',
+                'websocket message example'
             ]
         };
 
@@ -62,6 +64,7 @@ describe('hapi-plus:app', function() {
                 'routes/examples/mongoExample.js',
                 'routes/examples/mySqlExample.js',
                 'routes/examples/postgreExample.js',
+                'routes/examples/socketExample.js',
                 'routes/users/login.js',
                 'routes/users/me.js',
                 'routes/users/register.js'
@@ -75,6 +78,7 @@ describe('hapi-plus:app', function() {
             assert.fileContent('package.json', /hapi-pg-promise/);
             assert.fileContent('package.json', /hapi-plugin-mysql/);
             assert.fileContent('package.json', /hapi-mongodb/);
+            assert.fileContent('package.json', /nes/);
             assert.fileContent('package.json', new RegExp(appName));
             assert.fileContent('README.md', new RegExp(appName));
             assert.fileContent('docker-compose.yml', new RegExp(appName));
@@ -99,6 +103,7 @@ describe('hapi-plus:app', function() {
             features: [],
             docker: false,
             auth: false,
+            ws: false,
             routes: []
         };
 
@@ -122,6 +127,7 @@ describe('hapi-plus:app', function() {
                 'routes/examples/mongoExample.js',
                 'routes/examples/mySqlExample.js',
                 'routes/examples/postgreExample.js',
+                'routes/examples/socketExample.js',
                 'routes/users/login.js',
                 'routes/users/me.js',
                 'routes/users/register.js'
@@ -135,10 +141,12 @@ describe('hapi-plus:app', function() {
             assert.noFileContent('package.json', /hapi-plugin-mysql/);
             assert.noFileContent('package.json', /hapi-mongodb/);
             assert.noFileContent('package.json', /jsonwebtoken/);
+            assert.noFileContent('package.json', /nes/);
             assert.noFileContent('lib/loadPlugins.js', /jwt/i);
             assert.noFileContent('lib/loadPlugins.js', /hapi-pg-promise/);
             assert.noFileContent('lib/loadPlugins.js', /hapi-plugin-mysql/);
             assert.noFileContent('lib/loadPlugins.js', /hapi-mongodb/);
+            assert.noFileContent('lib/loadPlugins.js', /nes/);
         });
 
         it('has valid package.json', function() {
