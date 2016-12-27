@@ -235,7 +235,7 @@ module.exports = Generators.Base.extend({
         this.directory(Path.join('lib', 'policies'), Path.join(this.appName, 'lib', 'policies'));
         this.template(Path.join('lib', 'loadPlugins.js'), Path.join(this.appName, 'lib', 'loadPlugins.js'));
         if(this.auth) {
-            this.copy(Path.join('lib' ,'validateJWt.js'), Path.join(this.appName, 'lib', 'validateJWt.js'));
+            this.copy(Path.join('lib' ,'validateJwt.js'), Path.join(this.appName, 'lib', 'validateJwt.js'));
         }
 
         // copy /routes folder
