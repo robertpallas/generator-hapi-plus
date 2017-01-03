@@ -38,7 +38,7 @@ describe('hapi-plus:app', function() {
         };
 
         before(function() {
-            return helpers.run(path.join( __dirname, '../app'))
+            return helpers.run(path.join( __dirname, '..' , 'generators', 'app'))
                 .withArguments([appName])
                 .withPrompts(promptAnswers)
                 .toPromise()
@@ -108,7 +108,7 @@ describe('hapi-plus:app', function() {
         };
 
         before(function() {
-            return helpers.run(path.join( __dirname, '../app'))
+            return helpers.run(path.join( __dirname, '..' , 'generators', 'app'))
                 .withArguments([appName])
                 .withPrompts(promptAnswers)
                 .toPromise()

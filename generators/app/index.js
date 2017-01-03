@@ -18,7 +18,7 @@ module.exports = Generators.Base.extend({
         });
     },
     init() {
-        this.pkg = this.fs.readJSON(Path.join(__dirname, '../package.json'));
+        this.pkg = this.fs.readJSON(Path.join(__dirname, '..' , '..', 'package.json'));
     },
     git() {
         const done = this.async();
