@@ -9,6 +9,11 @@
     "type": "git",
     "url": "git+https://github.com/robertpallas/generator-hapi-plus.git"
   },
+  "main": "generators/app/index.js",
+  "files": [
+    "generators/app",
+    "generators/test"
+  ],
   "keywords": [
     "yeoman-generator",
     "hapi",
@@ -26,10 +31,13 @@
   "homepage": "https://github.com/robertpallas/generator-hapi-plus#readme",
   "dependencies": {
     "chalk": "^1.1.3",
+    "felicity": "^1.1.0",
     "git-config": "0.0.7",
     "lodash": "^4.16.4",
     "mkdirp": "^0.5.1",
     "randomstring": "^1.1.5",
+    "recursive-readdir-sync": "^1.0.6",
+    "stringify-object": "^3.1.0",
     "yeoman-generator": "^0.24.1",
     "yosay": "^1.2.1"
   },
