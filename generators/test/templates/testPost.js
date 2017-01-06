@@ -3,7 +3,7 @@ const should = require('should');
 
 describe('<%= route.nameNoColor %>', function() {
 
-    let url = '<%= runConfig.url %>';<% if(route.handler.config && route.handler.config.auth) { %>
+    const url = '<%= runConfig.url %>';<% if(route.handler.config && route.handler.config.auth) { %>
     let token;
 
     before(function(done) {
@@ -38,7 +38,7 @@ describe('<%= route.nameNoColor %>', function() {
 
                 should(err).not.be.ok();
 
-                res.body.id.should.be.a.Number();
+                res.body.id.should.match(/^[0-9]+$/);
                 let id = res.body.id;
 
                 // check it saved correctly

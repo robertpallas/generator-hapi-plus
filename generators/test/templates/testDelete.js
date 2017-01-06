@@ -3,7 +3,7 @@ const should = require('should');
 
 describe('<%= route.nameNoColor %>', function() {
 
-    let url = '<%= runConfig.url %>';<% if(route.handler.config && route.handler.config.auth) { %>
+    const url = '<%= runConfig.url %>';<% if(route.handler.config && route.handler.config.auth) { %>
     let token;
 
     before(function(done) {

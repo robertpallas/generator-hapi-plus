@@ -32,7 +32,6 @@ module.exports = Generators.Base.extend({
         try {
             this.files = recursive(Path.join(process.cwd(), 'routes'));
         } catch(err) {
-            console.log(err);
             this.log(`${chalk.red('Could not find /routes, cant generate tests')}`);
             process.exit(1);
         }
@@ -41,7 +40,7 @@ module.exports = Generators.Base.extend({
         this.runConfig = defaultTestRc;
         try {
             this.runConfig = require(Path.join(process.cwd(), '.yohapiplustestrc'));
-        } catch(e) {console.log(e);}
+        } catch(e) {}
     },
     getRoutesFromFiles() {
         this.routes = [];
