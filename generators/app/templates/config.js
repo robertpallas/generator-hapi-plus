@@ -3,7 +3,7 @@ module.exports = {
     postgreSql: {
         host: '<%= config.postgre.host %>',
         port: <%= config.postgre.port || 5432 %>,
-        username: '<%= config.postgre.user %>',
+        user: '<%= config.postgre.user %>',
         password: '<%= config.postgre.password %>',
         database: '<%= config.postgre.database %>'
     },<% } if(config.mysql) { %>
