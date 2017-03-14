@@ -1,6 +1,6 @@
 {
   "name": "generator-hapi-plus",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Hapi REST API generator with PostgreSql, MySql, Mongo plugins, automatic Swagger docs, authentication with JWT, logging, Docker etc",
   "scripts": {
     "test": "mocha"

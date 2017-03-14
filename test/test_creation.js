@@ -53,6 +53,7 @@ describe('hapi-plus:app', function() {
                 'Dockerfile',
                 'README.md',
                 'config.js',
+                'config-example.js',
                 'docker-compose.yml',
                 'index.js',
                 'package.json',

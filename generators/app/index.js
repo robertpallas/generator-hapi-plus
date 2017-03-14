@@ -232,6 +232,7 @@ module.exports = Generators.Base.extend({
         this.template('_package.json', Path.join(this.appName, 'package.json'));
         this.template('_README.md', Path.join(this.appName, 'README.md'));
         this.template('config.js', Path.join(this.appName, 'config.js'));
+        this.template('config-example.js', Path.join(this.appName, 'config-example.js'));
 
         if(this.docker) {
             this.copy('.dockerignore', Path.join(this.appName, '.dockerignore'));
