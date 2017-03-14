@@ -101,9 +101,7 @@ module.exports = Generators.Base.extend({
             if(route.handler.config && route.handler.config.validate) {
                 _.each(route.handler.config.validate, (paramList, method) => {
                     _.each(paramList, (joiSchema, key) => {
-                        const FelicityConstructor = Felicity.entityFor(joiSchema);
-                        const felicityInstance = new FelicityConstructor();
-                        route.random[method][key] = felicityInstance.example();
+                        route.random[method][key] = Felicity.example(joiSchema);
                     });
                 });
             }
