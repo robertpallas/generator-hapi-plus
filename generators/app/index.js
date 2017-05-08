@@ -263,5 +263,9 @@ module.exports = Generators.Base.extend({
         if(this.routes.welcome) {
             this.copy(Path.join('routes' ,'get.js'), Path.join(this.appName, 'routes', 'get.js'));
         }
+
+        this.copy(Path.join('routes' ,'examples', 'simplePromiseExample.js'), Path.join(this.appName, 'routes', 'examples', 'simplePromiseExample.js'));
+        this.copy(Path.join('routes' ,'examples', 'simpleReturnExample.js'), Path.join(this.appName, 'routes', 'examples', 'simpleReturnExample.js'));
+        this.copy(Path.join('routes' ,'examples', 'simpleReplyExample.js'), Path.join(this.appName, 'routes', 'examples', 'simpleReplyExample.js'));
     }
 });
