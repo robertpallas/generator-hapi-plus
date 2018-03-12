@@ -22,7 +22,6 @@
         "hapi-pg-promise": "1.0.0",<% } if(mysql) { %>
         "hapi-plugin-mysql": "^4.0.0",<% } %>
         "hapi-plus-routes": "^1.2.1",
-        "hapi-router": "^3.5.0",
         "hapi-swagger": "^7.2.0",
         "inert": "^4.0.2",
         "joi": "^10.1.0",<% if(auth) { %>
