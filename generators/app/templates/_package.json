@@ -3,7 +3,7 @@
     "description": "<%= description %>",
     "version": "0.1.0",
     "author": "<%- author %>",
-    "license": "UNLICENCED",
+    "license": "UNLICENSED",
     "private": true,
     "main": "index.js",
     "scripts": {
