@@ -1,6 +1,10 @@
 generator-hapi-plus
 ===================
-> Hapi (Node + Javascript + ES6) REST API generator
+> Hapi 16 (Node + Javascript + ES6) REST API generator
+
+Deprecated
+==========
+This generator generates Hapi 16 boilerplate and there are **no plans to update**. If you start a new Hapi project use version 17+.
 
 Quickstart
 ==========
